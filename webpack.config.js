@@ -1,7 +1,9 @@
 const path = require('path');
 
+// Plugins
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = env => {
@@ -17,7 +19,6 @@ module.exports = env => {
 
 	return {
 		mode: isDev ? 'development' : 'production',
-		// devtool: isDev && 'eval',
 		entry: isDev ? path.resolve(__dirname, APP_DIR, 'hmr.js') : path.resolve(__dirname, APP_DIR, ENTRY_FILENAME),
 		output: {
 			path: path.resolve(__dirname, BUILD_DIR),
@@ -88,6 +89,9 @@ module.exports = env => {
 			}),
 			new MiniCssExtractPlugin({
 				filename: OUTPUT_STYLES,
+			}),
+			new WebpackManifestPlugin({
+				filename: 'manifest.json',
 			}),
 		],
 	};
