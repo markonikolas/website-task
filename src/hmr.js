@@ -1,9 +1,12 @@
-// Initial import
-import './main.js';
+// Used only in watch mode e.g. --env watch
 
-// Accept module for Hot module reload
-if (module && module.hot) {
-	module.hot.accept('./main.js', () => {
-		console.log('Accepting module, updating...');
-	});
-}
+(async function hmr() {
+    const main = await import('./main.js');
+
+    // Accept module for Hot module reload
+    if (module && module.hot) {
+        module.hot.accept(main, () => {
+            console.log('Accepting module, updating...');
+        });
+    }
+})();
