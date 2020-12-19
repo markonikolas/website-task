@@ -11,18 +11,21 @@ module.exports = env => {
 	const APP_DIR = './src';
 	const BUILD_DIR = 'dist';
 	const BUILD_ASSETS_DIR = 'static';
-	const ENTRY_FILENAME = 'index.js';
-	const OUTPUT_SCRIPTS = isDev ? 'bundle_[contenthash].js' : 'index.js';
-	const OUTPUT_STYLES = isDev ? `${BUILD_ASSETS_DIR}/bundle_[contenthash].css` : `${BUILD_ASSETS_DIR}/main.css`;
+	const ENTRY_FILENAME = 'main.js';
+	const OUTPUT_SCRIPTS = isDev ? 'bundle_[contenthash].js' : '[contenthash].js';
+	const OUTPUT_STYLES = isDev ? `${BUILD_ASSETS_DIR}/bundle_[contenthash].css` : `${BUILD_ASSETS_DIR}/[contenthash].css`;
 
 	return {
 		mode: isDev ? 'development' : 'production',
-		devtool: isDev && 'eval',
+		// devtool: isDev && 'eval',
 		entry: isDev ? path.resolve(__dirname, APP_DIR, 'hmr.js') : path.resolve(__dirname, APP_DIR, ENTRY_FILENAME),
 		output: {
 			path: path.resolve(__dirname, BUILD_DIR),
 			filename: OUTPUT_SCRIPTS,
 			publicPath: '',
+		},
+		optimization: {
+			minimize: false,
 		},
 		devServer: {
 			contentBase: './dist',
@@ -78,7 +81,7 @@ module.exports = env => {
 		plugins: [
 			new CleanWebpackPlugin(),
 			new HTMLWebpackPlugin({
-				template: './template.html',
+				template: './src/template.html',
 				filename: 'index.html',
 				showErrors: isDev,
 				minify: !isDev,
