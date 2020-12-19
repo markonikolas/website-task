@@ -19,7 +19,7 @@ module.exports = env => {
     const ENTRY_FILENAME = 'main';
 
     // Filenames
-    const assetFilename = ternary(isDev, '[name].[contenthash]', '[contenthash]');
+    const assetFilename = ternary('test', '[name].[contenthash]', '[contenthash]');
 
     return {
         mode: ternary(isDev, 'development', 'production'),
