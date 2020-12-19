@@ -1,3 +1,5 @@
+// Used only in watch mode, check webpack.config
+
 // Initial import
 import './main.js';
 
