@@ -6,93 +6,98 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
+// Helpers
+const ternary = require('./helper/');
+
 module.exports = env => {
-	const isDev = !env.production;
-	const isWatching = env.watch;
+    const isDev = !env.production;
+    const isWatching = env.watch;
 
-	const APP_DIR = './src';
-	const BUILD_DIR = 'dist';
-	const BUILD_ASSETS_DIR = 'static';
-	const ENTRY_FILENAME = 'main.js';
-	const OUTPUT_SCRIPTS = isDev ? 'bundle_[contenthash].js' : '[contenthash].js';
-	const OUTPUT_STYLES = isDev ? `${BUILD_ASSETS_DIR}/bundle_[contenthash].css` : `${BUILD_ASSETS_DIR}/[contenthash].css`;
+    const APP_DIR = './src';
+    const BUILD_DIR = 'dist';
+    const BUILD_ASSETS_DIR = 'static';
+    const ENTRY_FILENAME = 'main';
 
-	return {
-		mode: isDev ? 'development' : 'production',
-		entry: isDev ? path.resolve(__dirname, APP_DIR, 'hmr.js') : path.resolve(__dirname, APP_DIR, ENTRY_FILENAME),
-		output: {
-			path: path.resolve(__dirname, BUILD_DIR),
-			filename: OUTPUT_SCRIPTS,
-			publicPath: '',
-		},
-		optimization: {
-			minimize: false,
-		},
-		devServer: {
-			contentBase: './dist',
-		},
-		module: {
-			rules: [
-				{
-					test: /\.s?[ac]ss$/i,
-					use: [isWatching ? 'style-loader' : MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
-				},
-				{
-					test: /\.js$/i,
-					exclude: /node_modules/,
-					use: 'babel-loader',
-				},
-				{
-					test: /\.(png|jpe?g)$/i,
-					loader: 'url-loader',
-					options: {
-						name: `${BUILD_ASSETS_DIR}/images/[name].[ext]`,
-						limit: isWatching ? 10240 : 0, // Inline less than 10KB
-					},
-				},
-				{
-					test: /\.svg$/i,
-					loader: 'url-loader',
-					options: {
-						name: `${BUILD_ASSETS_DIR}/icons/[name].[ext]`,
-						limit: isWatching ? 10240 : 0,
-					},
-				},
-				{
-					test: /\.(png|jpe?g|svg)$/i,
-					loader: 'image-webpack-loader',
-					options: {
-						enforce: 'pre',
-						bypassOnDebug: true,
-						limit: isWatching ? 10240 : 0,
-					},
-				},
-				{
-					test: /\.(ttf|woff|woff2|otf)$/i,
-					loader: 'url-loader',
-					options: {
-						name: `[name].[ext]`,
-						outputPath: 'static/fonts',
-						publicPath: 'fonts/',
-						limit: isWatching ? 10240 : 0,
-					},
-				},
-			],
-		},
-		plugins: [
-			new CleanWebpackPlugin(),
-			new HTMLWebpackPlugin({
-				template: './src/template.html',
-				filename: 'index.html',
-				showErrors: isDev,
-				minify: !isDev,
-			}),
-			new MiniCssExtractPlugin({
-				filename: OUTPUT_STYLES,
-			}),
-			new WebpackManifestPlugin({
-				filename: 'manifest.json',
-			}),
-		],
-	};
+    // Filenames
+    const assetFilename = ternary(isDev, '[name].[contenthash]', '[contenthash]');
+
+    return {
+        mode: ternary(isDev, 'development', 'production'),
+
+        entry: path.resolve(__dirname, APP_DIR, ternary(isWatching, 'hmr.js', ENTRY_FILENAME)),
+        output: {
+            path: path.resolve(__dirname, BUILD_DIR),
+            filename: `${assetFilename}.js`,
+            publicPath: '',
+        },
+        devServer: {
+            contentBase: './dist',
+            open: {
+                target: 'navigator',
+            },
+        },
+        module: {
+            rules: [
+                {
+                    test: /\.s?[ac]ss$/i,
+                    use: [ternary(isWatching, 'style-loader', MiniCssExtractPlugin.loader), 'css-loader', 'sass-loader'],
+                },
+                {
+                    test: /\.js$/i,
+                    exclude: /node_modules/,
+                    use: 'babel-loader',
+                },
+                {
+                    test: /\.(png|jpe?g)$/i,
+                    loader: 'url-loader',
+                    options: {
+                        name: `${BUILD_ASSETS_DIR}/images/${assetFilename}.[ext]`,
+                        limit: ternary(isWatching, 10240, false), // Inline less than 10KB
+                    },
+                },
+                {
+                    test: /\.svg$/i,
+                    loader: 'url-loader',
+                    options: {
+                        name: `${BUILD_ASSETS_DIR}/icons/${assetFilename}.[ext]`,
+                        limit: ternary(isWatching, 10240, false),
+                    },
+                },
+                {
+                    test: /\.(png|jpe?g|svg)$/i,
+                    loader: 'image-webpack-loader',
+                    options: {
+                        enforce: 'pre',
+                        bypassOnDebug: true,
+                        limit: ternary(isWatching, 10240, false),
+                    },
+                },
+                {
+                    test: /\.(ttf|woff|woff2|otf)$/i,
+                    loader: 'url-loader',
+                    options: {
+                        name: `${assetFilename}.[ext]`,
+                        outputPath: 'static/fonts',
+                        publicPath: 'fonts/',
+                        limit: ternary(isWatching, 10240, false),
+                    },
+                },
+            ],
+        },
+        plugins: [
+            new CleanWebpackPlugin(),
+            new HTMLWebpackPlugin({
+                template: './src/template.html',
+                filename: 'index.html',
+                showErrors: isDev,
+                minify: !isDev,
+            }),
+            new MiniCssExtractPlugin({
+                filename: `${BUILD_ASSETS_DIR}/${assetFilename}.css`,
+            }),
+            new WebpackManifestPlugin({
+                filename: 'manifest.json',
+            }),
+        ],
+    };
 };
