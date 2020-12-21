@@ -11,10 +11,10 @@ const ternary = require('./helper/');
 
 module.exports = env => {
     const isDev = !env.production;
-    const isWatching = env.watch;
+    const isWatching = !!env.watch;
 
     const APP_DIR = './src';
-    const BUILD_DIR = 'dist';
+    const BUILD_DIR = 'public';
     const BUILD_ASSETS_DIR = 'static';
     const ENTRY_FILENAME = 'main';
 
@@ -79,7 +79,7 @@ module.exports = env => {
                         name: `${assetFilename}.[ext]`,
                         outputPath: 'static/fonts',
                         publicPath: 'fonts/',
-                        limit: ternary(isWatching, 10240, false),
+                        limit: isWatching,
                     },
                 },
             ],
