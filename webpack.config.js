@@ -37,6 +37,7 @@ module.exports = env => {
                 target: 'navigator',
             },
             hot: true,
+            hotOnly: true,
         },
         module: {
             rules: [
