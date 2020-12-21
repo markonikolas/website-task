@@ -24,17 +24,19 @@ module.exports = env => {
     return {
         mode: ternary(isDev, 'development', 'production'),
 
-        entry: path.resolve(__dirname, APP_DIR, ternary(isWatching, 'hmr.js', ENTRY_FILENAME)),
+        entry: path.resolve(__dirname, APP_DIR, ENTRY_FILENAME),
         output: {
             path: path.resolve(__dirname, BUILD_DIR),
             filename: `${assetFilename}.js`,
             publicPath: '',
         },
         devServer: {
-            contentBase: './dist',
+            // Hot only works for css
+            contentBase: BUILD_DIR,
             open: {
                 target: 'navigator',
             },
+            hot: true,
         },
         module: {
             rules: [
