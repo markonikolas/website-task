@@ -3,7 +3,7 @@ root = true
 
 # Unix-style newlines with a newline ending every file
 [*]
-end_of_line = lf
+end_of_line = crlf
 insert_final_newline = true
 
 # Matches multiple files with brace expansion notation
@@ -11,11 +11,7 @@ insert_final_newline = true
 [*.js]
 charset = utf-8
 
-[*.{html,js}]
-indent_style = tab
-tab_width = 4
-
-[*.sass]
+[*.{html,js,sass,css}]
 indent_style = tab
 tab_width = 4
 
@@ -23,14 +19,9 @@ tab_width = 4
 indent_style = tab
 tab_width = 2
 
-
 # Indentation override for all JS under lib directory
-[lib/**.js]
-indent_style = space
-indent_size = 2
-
-# Matches the exact files either package.json or .travis.yml
-[package.json]
+[lib/**.js, package.json]
 indent_style = tab
 tab_width = 2
+
 
