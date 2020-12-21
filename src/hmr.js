@@ -1,11 +1,12 @@
-// Used only in watch mode, check webpack.config
+// Used only in watch mode e.g. --env watch
 
-// Initial import
-import './main.js';
+(async function hmr() {
+    const main = await import('./main.js');
 
-// Accept module for Hot module reload
-if (module && module.hot) {
-	module.hot.accept('./main.js', () => {
-		console.log('Accepting module, updating...');
-	});
-}
+    // Accept module for Hot module reload
+    if (module && module.hot) {
+        module.hot.accept(main, () => {
+            console.log('Accepting module, updating...');
+        });
+    }
+})();
