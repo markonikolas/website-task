@@ -8,11 +8,10 @@ export class Greeting {
     }
 
     greet() {
-        console.log(this.message);
+        return this.message;
     }
 
     bye() {
         console.log('Goodbye!');
     }
-    test() {}
 }

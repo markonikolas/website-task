@@ -1,4 +1,8 @@
-import './utils/util';
+import { utils } from './utils/util';
 import { Greeting } from './class/Greeting';
 
-new Greeting('Hello World').greet();
+const title = new Greeting('Hello World');
+
+document.querySelector('.starter__title').innerHTML = title.greet() + ' !';
+
+utils();
