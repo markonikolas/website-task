@@ -3,7 +3,7 @@ root = true
 
 # Unix-style newlines with a newline ending every file
 [*]
-end_of_line = crlf
+end_of_line = lf
 insert_final_newline = true
 
 # Matches multiple files with brace expansion notation
@@ -25,3 +25,6 @@ indent_style = tab
 tab_width = 2
 
 
+[*.html]
+insert_final_newline = true
+trim_trailing_whitespace = false
