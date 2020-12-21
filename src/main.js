@@ -13,7 +13,7 @@ import './assets/images/img-connect.jpg';
 import './assets/images/img-forest.jpg';
 import './assets/images/img-sea.jpg';
 
-import './scripts';
+import './scripts/index';
 
 // Only files accepted here will be hot replaced.
 // When making changes in this file be sure to reload the page.

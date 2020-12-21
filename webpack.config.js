@@ -1,29 +1,59 @@
 const path = require('path');
 
-// Plugins
-const HTMLWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-
 // Helpers
 const ternary = require('./helper/');
 
 module.exports = env => {
+    // Env
     const isDev = !env.production;
     const isWatching = !!env.watch;
+    const isAnalize = !!env.analyze;
 
+    // Constants
     const APP_DIR = './src';
     const BUILD_DIR = 'public';
     const BUILD_ASSETS_DIR = 'static';
     const ENTRY_FILENAME = 'main';
 
+    // Plugins
+    const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+    const HTMLWebpackPlugin = require('html-webpack-plugin');
+    const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+    const BundleAnalyzerPlugin = isAnalize && require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+    const WebpackManifestPlugin = !isDev && require('webpack-manifest-plugin').WebpackManifestPlugin;
+
     // Filenames
-    const assetFilename = ternary(isDev, '[name].[contenthash]', '[contenthash]');
+    const assetFilename = ternary(isDev, '[name]', '[contenthash]');
+
+    const plugins = [
+        new CleanWebpackPlugin(),
+        new HTMLWebpackPlugin({
+            template: './src/template.html',
+            filename: 'index.html',
+            showErrors: isDev,
+            minify: !isDev,
+        }),
+        new MiniCssExtractPlugin({
+            filename: `${BUILD_ASSETS_DIR}/${assetFilename}.css`,
+        }),
+    ];
+
+    if (WebpackManifestPlugin) {
+        plugins.push(
+            new WebpackManifestPlugin({
+                filename: 'manifest.json',
+            }),
+        );
+    }
+
+    if (BundleAnalyzerPlugin) {
+        plugins.push(new BundleAnalyzerPlugin());
+    }
 
     return {
         mode: ternary(isDev, 'development', 'production'),
-
+        devtool: isDev && 'cheap-source-map',
         entry: path.resolve(__dirname, APP_DIR, ENTRY_FILENAME),
         output: {
             path: path.resolve(__dirname, BUILD_DIR),
@@ -31,12 +61,16 @@ module.exports = env => {
             publicPath: '',
         },
         devServer: {
-            // Hot only works for css
             contentBase: BUILD_DIR,
             open: {
                 target: 'navigator',
             },
             hot: true,
+        },
+        watchOptions: {
+            ignored: /node_modules/,
+            aggregateTimeout: 400,
+            poll: 1000,
         },
         module: {
             rules: [
@@ -48,14 +82,6 @@ module.exports = env => {
                     test: /\.js$/i,
                     exclude: /node_modules/,
                     use: 'babel-loader',
-                },
-                {
-                    test: /\.(png|jpe?g)$/i,
-                    loader: 'url-loader',
-                    options: {
-                        name: `${BUILD_ASSETS_DIR}/images/${assetFilename}.[ext]`,
-                        limit: ternary(isWatching, 10240, false), // Inline less than 10KB
-                    },
                 },
                 {
                     test: /\.svg$/i,
@@ -84,22 +110,16 @@ module.exports = env => {
                         limit: isWatching,
                     },
                 },
+                {
+                    test: /\.(png|jpe?g)$/i,
+                    loader: 'url-loader',
+                    options: {
+                        name: `${BUILD_ASSETS_DIR}/images/${assetFilename}.[ext]`,
+                        limit: ternary(isWatching, 10240, false),
+                    },
+                },
             ],
         },
-        plugins: [
-            new CleanWebpackPlugin(),
-            new HTMLWebpackPlugin({
-                template: './src/template.html',
-                filename: 'index.html',
-                showErrors: isDev,
-                minify: !isDev,
-            }),
-            new MiniCssExtractPlugin({
-                filename: `${BUILD_ASSETS_DIR}/${assetFilename}.css`,
-            }),
-            new WebpackManifestPlugin({
-                filename: 'manifest.json',
-            }),
-        ],
+        plugins,
     };
 };

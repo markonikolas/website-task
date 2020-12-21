@@ -10,7 +10,9 @@ export class Greeting {
     greet() {
         return this.message;
     }
+}
 
+export class Bye {
     bye() {
         console.log('Goodbye!');
     }
