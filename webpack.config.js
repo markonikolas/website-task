@@ -16,12 +16,11 @@ module.exports = env => {
     const ENTRY_FILENAME = 'main';
 
     // Plugins
-    const { CleanWebpackPlugin } = require('clean-webpack-plugin');
     const HTMLWebpackPlugin = require('html-webpack-plugin');
     const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-
-    const BundleAnalyzerPlugin = isAnalize && require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-    const WebpackManifestPlugin = !isDev && require('webpack-manifest-plugin').WebpackManifestPlugin;
+    const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+    const { BundleAnalyzerPlugin } = isAnalize && require('webpack-bundle-analyzer');
+    const { WebpackManifestPlugin } = !isDev && require('webpack-manifest-plugin');
 
     // Filenames
     const assetFilename = ternary(isDev, '[name]', '[contenthash]');
