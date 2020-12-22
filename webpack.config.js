@@ -77,7 +77,16 @@ module.exports = env => {
 							'style-loader',
 							MiniCssExtractPlugin.loader
 						),
-						'css-loader',
+						{
+							loader: 'css-loader',
+							options: {
+								// If css modules are a thing
+								// modules: true,
+								// modules: "global",
+
+								sourceMap: isDev
+							}
+						},
 						'sass-loader'
 					]
 				},
