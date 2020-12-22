@@ -74,7 +74,7 @@ module.exports = env => {
 					defaultVendors: {
 						// Note the usage of `[\\/]` as a path separator for cross-platform compatibility.
 						test: /[\\/]node_modules[\\/]lodash-es[\\/]/,
-						filename: '[name].bundle.js',
+						name: 'lodash',
 
 						// Tells webpack to ignore splitChunks.minSize, splitChunks.minChunks, splitChunk.
 						// maxAsyncRequests and splitChunks.maxInitialRequests options and always create
