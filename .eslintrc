@@ -1,11 +1,24 @@
 {
-  "extends": ["eslint:recommended"],
+  "extends": "eslint:recommended",
   "env": {
     "es6": true,
-    "node": true
+    "node": true,
+    "browser": true
   },
+
   "rules": {
     "max-len": ["error", { "code": 80 }],
-    "indent": ["error", 2]
+    "indent": ["error", "tab"],
+    "no-mixed-spaces-and-tabs": 2,
+
+    "semi": ["error", "always"],
+    "quotes": ["error", "double"],
+    "space-in-parens": 2,
+    "array-bracket-spacing": 2
+  },
+
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module"
   }
 }

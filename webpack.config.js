@@ -78,7 +78,11 @@ module.exports = (env) => {
 				{
 					test: /\.s?[ac]ss$/i,
 					use: [
-						ternary(isWatching, "style-loader", MiniCssExtractPlugin.loader),
+						ternary(
+							isWatching,
+							"style-loader",
+							MiniCssExtractPlugin.loader
+						),
 						"css-loader",
 						"sass-loader",
 					],
