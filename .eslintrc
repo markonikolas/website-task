@@ -1,24 +1,42 @@
 {
-  "extends": "eslint:recommended",
-  "env": {
-    "es6": true,
-    "node": true,
-    "browser": true
-  },
+    "extends": ["eslint:recommended", "airbnb-base"],
+    "env": {
+        "es6": true,
+        "node": true,
+        "browser": true
+    },
 
-  "rules": {
-    "max-len": ["error", { "code": 80 }],
-    "indent": ["error", "tab"],
-    "no-mixed-spaces-and-tabs": 2,
+    "rules": {
+        "indent": ["error", "tab"],
+        "no-mixed-spaces-and-tabs": 2,
+        "no-tabs": 0,
+        "global-require": 0,
+        "semi": ["error", "always"],
+        "comma-dangle": [
+            "error",
+            {
+                "functions": "never"
+            }
+        ],
+        "quotes": [
+            "error",
+            "single",
+            { "allowTemplateLiterals": true, "avoidEscape": true }
+        ],
+        "space-in-parens": ["error", "always", { "exceptions": ["empty"] }],
+        "arrow-parens": ["error", "as-needed"],
+        "array-bracket-spacing": ["error", "always"],
+        "no-extra-parens": ["error", "all"],
 
-    "semi": ["error", "always"],
-    "quotes": ["error", "double"],
-    "space-in-parens": 2,
-    "array-bracket-spacing": 2
-  },
+        // Best Practices
+        "accessor-pairs": [
+            "warn",
+            { "getWithoutSet": true, "setWithoutGet": true }
+        ]
+    },
 
-  "parserOptions": {
-    "ecmaVersion": 6,
-    "sourceType": "module"
-  }
+    "parserOptions": {
+        "ecmaVersion": 6,
+        "sourceType": "module"
+    }
 }

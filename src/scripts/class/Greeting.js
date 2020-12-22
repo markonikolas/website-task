@@ -1,19 +1,17 @@
-export class Greeting {
-	constructor(message) {
-		this._message = message;
+export default class Greeting {
+	constructor( message ) {
+		this.message = message;
+	}
+
+	set message( message ) {
+		this.message = message;
 	}
 
 	get message() {
-		return this._message;
+		return this.message;
 	}
 
 	greet() {
-		return this.message;
-	}
-}
-
-export class Bye {
-	bye() {
-		console.log("Goodbye!");
+		return `${this.message} !`;
 	}
 }

@@ -3,7 +3,7 @@ root = true
 
 # Unix-style newlines with a newline ending every file
 [*]
-end_of_line = crlf
+end_of_line = lf
 insert_final_newline = true
 
 # Set default charset
@@ -18,7 +18,7 @@ tab_width = 4
 # Configuration
 [webpack.config.js, package.json, eslintrc, prettierrc]
 indent_style = tab
-tab_width = 2
+tab_width = 1
 
 [*.html]
 insert_final_newline = true

@@ -1,5 +1,5 @@
 // Utility file, import if neded.
 
-export function utils() {
-    console.log('Utilities loaded.');
+export default function utils() {
+	return `Utilities loaded.`;
 }
