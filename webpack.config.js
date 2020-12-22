@@ -48,7 +48,7 @@ module.exports = env => {
 
 	return {
 		mode: ternary( isDev, 'development', 'production' ),
-		devtool: isDev && 'cheap-source-map',
+		devtool: isDev && 'source-map',
 		entry: path.resolve( __dirname, APP_DIR, ENTRY_FILENAME ),
 		output: {
 			path: path.resolve( __dirname, BUILD_DIR ),
@@ -66,6 +66,24 @@ module.exports = env => {
 			ignored: /node_modules/,
 			aggregateTimeout: 400,
 			poll: 1000
+		},
+		optimization: {
+			splitChunks: {
+				chunks: 'all',
+				cacheGroups: {
+					defaultVendors: {
+						// Note the usage of `[\\/]` as a path separator for cross-platform compatibility.
+						test: /[\\/]node_modules[\\/]lodash-es[\\/]/,
+						name: 'lodash',
+
+						// Tells webpack to ignore splitChunks.minSize, splitChunks.minChunks, splitChunk.
+						// maxAsyncRequests and splitChunks.maxInitialRequests options and always create
+						// chunks for this cache group.
+						enforce: true
+
+					}
+				}
+			}
 		},
 		module: {
 			rules: [
