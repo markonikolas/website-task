@@ -105,7 +105,12 @@ module.exports = env => {
 								sourceMap: isDev
 							}
 						},
-						'sass-loader'
+						{
+							loader: 'sass-loader',
+							options: {
+								sourceMap: isDev
+							}
+						}
 					]
 				},
 				{
