@@ -1,5 +1,4 @@
 const path = require( 'path' );
-
 // Helpers
 const ternary = require( './helper' );
 
@@ -13,7 +12,7 @@ module.exports = env => {
 	const APP_DIR = './src';
 	const BUILD_DIR = 'public';
 	const BUILD_ASSETS_DIR = 'static';
-	const ENTRY_FILENAME = 'main';
+	const ENTRY_FILENAME = 'index';
 
 	// Plugins
 	const HTMLWebpackPlugin = require( 'html-webpack-plugin' );
@@ -21,9 +20,10 @@ module.exports = env => {
 	const { CleanWebpackPlugin } = require( 'clean-webpack-plugin' );
 	const { BundleAnalyzerPlugin } = isAnalize && require( 'webpack-bundle-analyzer' );
 	const { WebpackManifestPlugin } = !isDev && require( 'webpack-manifest-plugin' );
+	const { SourceMapDevToolPlugin } = isDev && require( 'webpack' );
 
 	// Filenames
-	const assetFilename = ternary( isDev, '[name]', '[contenthash]' );
+	const assetFilename = ternary( isDev, '[id]', '[contenthash]' );
 
 	const sourceMap = {
 		sourceMap: isDev
@@ -50,13 +50,20 @@ module.exports = env => {
 		plugins.push( new BundleAnalyzerPlugin() );
 	}
 
+	if ( SourceMapDevToolPlugin ) {
+		plugins.push( new SourceMapDevToolPlugin( {
+			filename: 'sourcemaps/[id]_[contenthash][ext].map',
+			exclude: [ 'vendor.js', 'lodash.js', 'common.js' ]
+		} ) );
+	}
+
 	return {
 		mode: ternary( isDev, 'development', 'production' ),
-		devtool: isDev && 'source-map',
+		devtool: false,
 		entry: path.resolve( __dirname, APP_DIR, ENTRY_FILENAME ),
 		output: {
 			path: path.resolve( __dirname, BUILD_DIR ),
-			filename: `${assetFilename}.js`,
+			filename: `${assetFilename}`,
 			publicPath: ''
 		},
 		devServer: {
@@ -75,16 +82,14 @@ module.exports = env => {
 			splitChunks: {
 				chunks: 'all',
 				cacheGroups: {
-					defaultVendors: {
+					defaultGroups: {
 						// Note the usage of `[\\/]` as a path separator for cross-platform compatibility.
 						test: /[\\/]node_modules[\\/]lodash-es[\\/]/,
-						name: 'lodash',
-
+						name: 'vendor',
 						// Tells webpack to ignore splitChunks.minSize, splitChunks.minChunks, splitChunk.
 						// maxAsyncRequests and splitChunks.maxInitialRequests options and always create
 						// chunks for this cache group.
 						enforce: true
-
 					}
 				}
 			}
@@ -106,7 +111,7 @@ module.exports = env => {
 						{
 							loader: 'postcss-loader',
 							options: {
-								// sourceMap,
+								sourceMap: isDev,
 								postcssOptions: {
 									plugins: [
 										'autoprefixer',
