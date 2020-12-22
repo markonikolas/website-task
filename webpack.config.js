@@ -23,7 +23,7 @@ module.exports = env => {
 	const { SourceMapDevToolPlugin } = isDev && require( 'webpack' );
 
 	// Filenames
-	const assetFilename = ternary( isDev, '[id]', '[contenthash]' );
+	const assetFilename = ternary( isDev, '[name]', '[contenthash]' );
 
 	const sourceMap = {
 		sourceMap: isDev
@@ -52,8 +52,8 @@ module.exports = env => {
 
 	if ( SourceMapDevToolPlugin ) {
 		plugins.push( new SourceMapDevToolPlugin( {
-			filename: 'sourcemaps/[id]_[contenthash][ext].map',
-			exclude: [ 'vendor.js', 'lodash.js', 'common.js' ]
+			filename: 'sourcemaps/[contenthash][ext].map',
+			exclude: [ 'vendor_*.js', 'lodash.js', 'common.js' ]
 		} ) );
 	}
 
@@ -63,7 +63,8 @@ module.exports = env => {
 		entry: path.resolve( __dirname, APP_DIR, ENTRY_FILENAME ),
 		output: {
 			path: path.resolve( __dirname, BUILD_DIR ),
-			filename: `${assetFilename}`,
+			filename: isDev ? 'index.js' : '[contenthash].js',
+			chunkFilename: `${assetFilename}.chunk.js`,
 			publicPath: ''
 		},
 		devServer: {
@@ -82,10 +83,10 @@ module.exports = env => {
 			splitChunks: {
 				chunks: 'all',
 				cacheGroups: {
-					defaultGroups: {
+					defaultVendors: {
 						// Note the usage of `[\\/]` as a path separator for cross-platform compatibility.
 						test: /[\\/]node_modules[\\/]lodash-es[\\/]/,
-						name: 'vendor',
+						filename: isDev ? 'vendor.js' : '[contenthash].js',
 						// Tells webpack to ignore splitChunks.minSize, splitChunks.minChunks, splitChunk.
 						// maxAsyncRequests and splitChunks.maxInitialRequests options and always create
 						// chunks for this cache group.
