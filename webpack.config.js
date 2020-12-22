@@ -25,6 +25,10 @@ module.exports = env => {
 	// Filenames
 	const assetFilename = ternary( isDev, '[name]', '[contenthash]' );
 
+	const sourceMap = {
+		sourceMap: isDev
+	};
+
 	const plugins = [
 		new CleanWebpackPlugin(),
 		new HTMLWebpackPlugin( {
@@ -97,19 +101,24 @@ module.exports = env => {
 						),
 						{
 							loader: 'css-loader',
+							options: sourceMap
+						},
+						{
+							loader: 'postcss-loader',
 							options: {
-								// If css modules are a thing
-								// modules: true,
-								// modules: "global",
-
-								sourceMap: isDev
+								// sourceMap,
+								postcssOptions: {
+									plugins: [
+										'autoprefixer',
+										'postcss-preset-env'
+									]
+								}
 							}
+
 						},
 						{
 							loader: 'sass-loader',
-							options: {
-								sourceMap: isDev
-							}
+							options: sourceMap
 						}
 					]
 				},
