@@ -15,7 +15,7 @@ import './assets/images/img-sea.jpg';
 
 import './scripts/index';
 
-// Only files accepted here will be hot replaced.
+// Only files accepted here will be hot reloaded.
 // When making changes in this file be sure to reload the page.
 if ( module && module.hot ) {
 	module.hot.accept( './scripts/index.js', () => 'Module accepted.' );
