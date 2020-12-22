@@ -48,7 +48,7 @@ module.exports = env => {
 
 	return {
 		mode: ternary( isDev, 'development', 'production' ),
-		devtool: isDev && 'cheap-source-map',
+		devtool: isDev && 'source-map',
 		entry: path.resolve( __dirname, APP_DIR, ENTRY_FILENAME ),
 		output: {
 			path: path.resolve( __dirname, BUILD_DIR ),
@@ -80,6 +80,7 @@ module.exports = env => {
 						// maxAsyncRequests and splitChunks.maxInitialRequests options and always create
 						// chunks for this cache group.
 						enforce: true
+
 					}
 				}
 			}
