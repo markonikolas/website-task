@@ -55,6 +55,7 @@
         "webpack-manifest-plugin": "^3.0.0"
     },
     "dependencies": {
-        "lodash-es": "^4.17.20"
+        "lodash-es": "^4.17.20",
+        "normalize.css": "^8.0.1"
     }
 }

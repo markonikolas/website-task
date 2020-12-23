@@ -14,19 +14,45 @@ module.exports = env => {
 	const BUILD_ASSETS_DIR = 'static';
 	const ENTRY_FILENAME = 'index';
 
+	// Filenames
+	const assetFilename = ternary( isDev, '[name]', '[contenthash]' );
+
 	// Plugins
 	const HTMLWebpackPlugin = require( 'html-webpack-plugin' );
 	const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
+
 	const { CleanWebpackPlugin } = require( 'clean-webpack-plugin' );
 	const { BundleAnalyzerPlugin } = isAnalize && require( 'webpack-bundle-analyzer' );
 	const { WebpackManifestPlugin } = !isDev && require( 'webpack-manifest-plugin' );
 	const { SourceMapDevToolPlugin } = isDev && require( 'webpack' );
 
-	// Filenames
-	const assetFilename = ternary( isDev, '[name]', '[contenthash]' );
-
+	// Config
 	const sourceMap = {
 		sourceMap: isDev
+	};
+
+	const optimization = {
+		runtimeChunk: 'single',
+		splitChunks: {
+			chunks: 'all',
+			cacheGroups: {
+				defaultVendors: {
+					// Note the usage of `[\\/]` as a path separator for cross-platform compatibility.
+					test: /[\\/]node_modules[\\/]lodash-es[\\/]/,
+					filename: isDev ? 'vendor.js' : '[contenthash].js',
+					// Tells webpack to ignore splitChunks.minSize, splitChunks.minChunks, splitChunk.
+					// maxAsyncRequests and splitChunks.maxInitialRequests options and always create
+					// chunks for this cache group.
+					enforce: true
+				},
+				// Imported in main.sass
+				normalize: {
+					test: /[\\/]node_modules[\\/]normalize.css[\\/]/,
+					filename: isDev ? 'vendor.css' : '[contenthash].css',
+					enforce: true
+				}
+			}
+		}
 	};
 
 	const plugins = [
@@ -38,7 +64,8 @@ module.exports = env => {
 			minify: !isDev
 		} ),
 		new MiniCssExtractPlugin( {
-			filename: `${BUILD_ASSETS_DIR}/${assetFilename}.css`
+			filename: `${BUILD_ASSETS_DIR}/${assetFilename}.css`,
+			chunkFilename: `${BUILD_ASSETS_DIR}/[name].css`
 		} )
 	];
 
@@ -53,7 +80,7 @@ module.exports = env => {
 	if ( SourceMapDevToolPlugin ) {
 		plugins.push( new SourceMapDevToolPlugin( {
 			filename: 'sourcemaps/[contenthash][ext].map',
-			exclude: [ 'vendor.js', 'lodash.js', 'common.js' ]
+			exclude: [ 'vendor.js', 'lodash.js', 'common.js', 'runtime.js' ]
 		} ) );
 	}
 
@@ -63,8 +90,8 @@ module.exports = env => {
 		entry: path.resolve( __dirname, APP_DIR, ENTRY_FILENAME ),
 		output: {
 			path: path.resolve( __dirname, BUILD_DIR ),
-			filename: isDev ? 'index.js' : '[contenthash].js',
-			chunkFilename: `${assetFilename}.chunk.js`,
+			filename: isDev ? '[name].js' : '[contenthash].js',
+			chunkFilename: isDev ? '[name]' : '[contenthash].js',
 			publicPath: ''
 		},
 		devServer: {
@@ -79,22 +106,7 @@ module.exports = env => {
 			aggregateTimeout: 400,
 			poll: 1000
 		},
-		optimization: {
-			splitChunks: {
-				chunks: 'all',
-				cacheGroups: {
-					defaultVendors: {
-						// Note the usage of `[\\/]` as a path separator for cross-platform compatibility.
-						test: /[\\/]node_modules[\\/]lodash-es[\\/]/,
-						filename: isDev ? 'vendor.js' : '[contenthash].js',
-						// Tells webpack to ignore splitChunks.minSize, splitChunks.minChunks, splitChunk.
-						// maxAsyncRequests and splitChunks.maxInitialRequests options and always create
-						// chunks for this cache group.
-						enforce: true
-					}
-				}
-			}
-		},
+
 		module: {
 			rules: [
 				{
@@ -170,6 +182,7 @@ module.exports = env => {
 				}
 			]
 		},
+		optimization: !isWatching ? optimization : { minimize: false },
 		plugins
 	};
 };
