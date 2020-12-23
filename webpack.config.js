@@ -26,13 +26,14 @@ module.exports = env => {
 	// Plugins
 	const HTMLWebpackPlugin = require( 'html-webpack-plugin' );
 	const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
-	const MediaQueryPlugin = require( 'media-query-plugin' );
 
 	const { CleanWebpackPlugin } = require( 'clean-webpack-plugin' );
 	const { BundleAnalyzerPlugin } = isAnalize && require( 'webpack-bundle-analyzer' );
-	const { WebpackManifestPlugin } = !isDev && require( 'webpack-manifest-plugin' );
 	const { SourceMapDevToolPlugin } = isDev && require( 'webpack' );
+
+	const { WebpackManifestPlugin } = !isDev && require( 'webpack-manifest-plugin' );
 	const CssMinimizerPlugin = !isDev && require( 'css-minimizer-webpack-plugin' );
+	const MediaQueryPlugin = !isDev && require( 'media-query-plugin' );
 
 	// Config
 	const mode = inDevMode.check( 'development', 'production' );
@@ -56,42 +57,13 @@ module.exports = env => {
 		aggregateTimeout: 400,
 		poll: 1000
 	};
+
 	const sourceMap = {
 		sourceMap: isDev
 	};
+
 	const modules = {
 		rules: [
-			{
-				test: /\.s?[ac]ss$/i,
-				use: [
-					inWatchMode.check(
-						'style-loader',
-						MiniCssExtractPlugin.loader
-					),
-					{
-						loader: 'css-loader',
-						options: sourceMap
-					},
-					isWatching && MediaQueryPlugin.loader,
-					{
-						loader: 'postcss-loader',
-						options: {
-							sourceMap: isDev,
-							postcssOptions: {
-								plugins: [
-									'autoprefixer',
-									'postcss-preset-env'
-								]
-							}
-						}
-
-					},
-					{
-						loader: 'sass-loader',
-						options: sourceMap
-					}
-				]
-			},
 			{
 				test: /\.js$/i,
 				exclude: /node_modules/,
@@ -120,7 +92,7 @@ module.exports = env => {
 				options: {
 					name: `${assetFilename}.[ext]`,
 					outputPath: 'static/fonts',
-					publicPath: 'fonts/',
+					publicPath: '../fonts/',
 					limit: isWatching
 				}
 			},
@@ -161,6 +133,43 @@ module.exports = env => {
 		minimizer: [ ]
 	};
 
+	// Loader Rules
+	const styleRules = {
+		test: /\.s?[ac]ss$/i,
+		use: [
+			inWatchMode.check(
+				'style-loader',
+				MiniCssExtractPlugin.loader
+			),
+			{
+				loader: 'css-loader',
+				options: sourceMap
+			}
+		]
+	};
+
+	const optimization = inWatchMode.check( { minimize: false }, optimizationOptions );
+
+	const plugins = [
+		new CleanWebpackPlugin( {
+			verbose: true
+		} ),
+		new HTMLWebpackPlugin( {
+			template: './src/template.html',
+			filename: 'index.html',
+			showErrors: isDev,
+			minify: !isDev,
+			favicon: `${APP_DIR}/assets/icons/icon-twitter.svg`
+		} ),
+		new MiniCssExtractPlugin( {
+			filename: `${BUILD_ASSETS_DIR}/styles/${assetFilename}.css`
+		} )
+	];
+
+	// *******
+
+	// Conditionally inserted
+	// Loaders
 	if ( CssMinimizerPlugin ) {
 		// Webpack 5 feature `...` to 'extend' Terser and other minimizers
 		optimizationOptions.minimizer.push( `...`, new CssMinimizerPlugin( {
@@ -177,21 +186,34 @@ module.exports = env => {
 		} ) );
 	}
 
-	const optimization = inWatchMode.check( { minimize: false }, optimizationOptions );
+	if ( MediaQueryPlugin ) {
+		styleRules.use.push( MediaQueryPlugin.loader );
+	}
 
-	const plugins = [
-		new CleanWebpackPlugin(),
-		new HTMLWebpackPlugin( {
-			template: './src/template.html',
-			filename: 'index.html',
-			showErrors: isDev,
-			minify: !isDev
-		} ),
-		new MiniCssExtractPlugin( {
-			filename: `${BUILD_ASSETS_DIR}/styles/${assetFilename}.css`
-		} )
+	const aditionalStyleLoaders = [
+		{
+			loader: 'postcss-loader',
+			options: {
+				sourceMap: isDev,
+				postcssOptions: {
+					plugins: [
+						'autoprefixer',
+						'postcss-preset-env'
+					]
+				}
+			}
+		},
+		{
+			loader: 'sass-loader',
+			options: sourceMap
+		}
 	];
+	// Add aditional loaders to the rules array
+	styleRules.use.push( ...aditionalStyleLoaders );
+	modules.rules.push( styleRules );
 
+	// *******
+	// Plugins
 	if ( WebpackManifestPlugin ) {
 		plugins.push( new WebpackManifestPlugin() );
 	}
@@ -206,8 +228,7 @@ module.exports = env => {
 			exclude: [ 'vendor.js', 'runtime.js' ]
 		} ) );
 	}
-
-	const CONFIG = {
+	const config = {
 		mode,
 		devtool,
 		entry,
@@ -219,5 +240,5 @@ module.exports = env => {
 		plugins
 	};
 
-	return CONFIG;
+	return config;
 };
