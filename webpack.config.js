@@ -53,7 +53,7 @@ module.exports = env => {
 	if ( SourceMapDevToolPlugin ) {
 		plugins.push( new SourceMapDevToolPlugin( {
 			filename: 'sourcemaps/[contenthash][ext].map',
-			exclude: [ 'vendor_*.js', 'lodash.js', 'common.js' ]
+			exclude: [ 'vendor.js', 'lodash.js', 'common.js' ]
 		} ) );
 	}
 
