@@ -1,6 +1,6 @@
-const path = require( 'path' );
-
 module.exports = env => {
+	const path = require( 'path' );
+
 	// Env
 	const isDev = !env.production;
 	const isWatching = !!env.watch;
@@ -34,12 +34,105 @@ module.exports = env => {
 
 	// Config
 	const mode = inDevMode.check( 'development', 'production' );
-
+	const devtool = false;
+	const entry = path.resolve( __dirname, APP_DIR, ENTRY_FILENAME );
+	const output = {
+		path: path.resolve( __dirname, BUILD_DIR ),
+		filename: inDevMode.check( '[name].js', '[contenthash].js' ),
+		chunkFilename: inDevMode.check( '[name]', '[contenthash].js' ),
+		publicPath: ''
+	};
+	const devServer = {
+		contentBase: BUILD_DIR,
+		open: {
+			target: 'navigator'
+		},
+		hot: true
+	};
+	const watchOptions = {
+		ignored: /node_modules/,
+		aggregateTimeout: 400,
+		poll: 1000
+	};
 	const sourceMap = {
 		sourceMap: isDev
 	};
+	const modules = {
+		rules: [
+			{
+				test: /\.s?[ac]ss$/i,
+				use: [
+					inWatchMode.check(
+						'style-loader',
+						MiniCssExtractPlugin.loader
+					),
+					{
+						loader: 'css-loader',
+						options: sourceMap
+					},
+					{
+						loader: 'postcss-loader',
+						options: {
+							sourceMap: isDev,
+							postcssOptions: {
+								plugins: [
+									'autoprefixer',
+									'postcss-preset-env'
+								]
+							}
+						}
 
-	const optimization = {
+					},
+					{
+						loader: 'sass-loader',
+						options: sourceMap
+					}
+				]
+			},
+			{
+				test: /\.js$/i,
+				exclude: /node_modules/,
+				use: 'babel-loader'
+			},
+			{
+				test: /\.svg$/i,
+				loader: 'url-loader',
+				options: {
+					name: `${BUILD_ASSETS_DIR}/icons/${assetFilename}.[ext]`,
+					limit: inWatchMode.check( 10240, false )
+				}
+			},
+			{
+				test: /\.(png|jpe?g|svg)$/i,
+				loader: 'image-webpack-loader',
+				options: {
+					enforce: 'pre',
+					bypassOnDebug: true,
+					limit: inWatchMode.check( 10240, false )
+				}
+			},
+			{
+				test: /\.(ttf|woff|woff2|otf)$/i,
+				loader: 'url-loader',
+				options: {
+					name: `${assetFilename}.[ext]`,
+					outputPath: 'static/fonts',
+					publicPath: 'fonts/',
+					limit: isWatching
+				}
+			},
+			{
+				test: /\.(png|jpe?g)$/i,
+				loader: 'url-loader',
+				options: {
+					name: `${BUILD_ASSETS_DIR}/images/${assetFilename}.[ext]`,
+					limit: inWatchMode.check( 10240, false )
+				}
+			}
+		]
+	};
+
+	const optimizationOptions = {
 		runtimeChunk: 'single',
 		splitChunks: {
 			chunks: 'all',
@@ -62,6 +155,8 @@ module.exports = env => {
 			}
 		}
 	};
+
+	const optimization = inWatchMode.check( { minimize: false }, optimizationOptions );
 
 	const plugins = [
 		new CleanWebpackPlugin(),
@@ -91,104 +186,17 @@ module.exports = env => {
 		} ) );
 	}
 
-	return {
+	const CONFIG = {
 		mode,
-		devtool: false,
-		entry: path.resolve( __dirname, APP_DIR, ENTRY_FILENAME ),
-		output: {
-			path: path.resolve( __dirname, BUILD_DIR ),
-			filename: inDevMode.check( '[name].js', '[contenthash].js' ),
-			chunkFilename: inDevMode.check( '[name]', '[contenthash].js' ),
-			publicPath: ''
-		},
-		devServer: {
-			contentBase: BUILD_DIR,
-			open: {
-				target: 'navigator'
-			},
-			hot: true
-		},
-		watchOptions: {
-			ignored: /node_modules/,
-			aggregateTimeout: 400,
-			poll: 1000
-		},
-
-		module: {
-			rules: [
-				{
-					test: /\.s?[ac]ss$/i,
-					use: [
-						inWatchMode.check(
-							'style-loader',
-							MiniCssExtractPlugin.loader
-						),
-						{
-							loader: 'css-loader',
-							options: sourceMap
-						},
-						{
-							loader: 'postcss-loader',
-							options: {
-								sourceMap: isDev,
-								postcssOptions: {
-									plugins: [
-										'autoprefixer',
-										'postcss-preset-env'
-									]
-								}
-							}
-
-						},
-						{
-							loader: 'sass-loader',
-							options: sourceMap
-						}
-					]
-				},
-				{
-					test: /\.js$/i,
-					exclude: /node_modules/,
-					use: 'babel-loader'
-				},
-				{
-					test: /\.svg$/i,
-					loader: 'url-loader',
-					options: {
-						name: `${BUILD_ASSETS_DIR}/icons/${assetFilename}.[ext]`,
-						limit: inWatchMode.check( 10240, false )
-					}
-				},
-				{
-					test: /\.(png|jpe?g|svg)$/i,
-					loader: 'image-webpack-loader',
-					options: {
-						enforce: 'pre',
-						bypassOnDebug: true,
-						limit: inWatchMode.check( 10240, false )
-					}
-				},
-				{
-					test: /\.(ttf|woff|woff2|otf)$/i,
-					loader: 'url-loader',
-					options: {
-						name: `${assetFilename}.[ext]`,
-						outputPath: 'static/fonts',
-						publicPath: 'fonts/',
-						limit: isWatching
-					}
-				},
-				{
-					test: /\.(png|jpe?g)$/i,
-					loader: 'url-loader',
-					options: {
-						name: `${BUILD_ASSETS_DIR}/images/${assetFilename}.[ext]`,
-						limit: inWatchMode.check( 10240, false )
-					}
-				}
-			]
-		},
-		optimization: inWatchMode.check( { minimize: false }, optimization ),
+		devtool,
+		entry,
+		output,
+		devServer,
+		watchOptions,
+		module: modules,
+		optimization,
 		plugins
 	};
+
+	return CONFIG;
 };
