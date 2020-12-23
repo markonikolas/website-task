@@ -33,7 +33,6 @@ module.exports = env => {
 
 	const { WebpackManifestPlugin } = !isDev && require( 'webpack-manifest-plugin' );
 	const CssMinimizerPlugin = !isDev && require( 'css-minimizer-webpack-plugin' );
-	const MediaQueryPlugin = !isDev && require( 'media-query-plugin' );
 
 	// Config
 	const mode = inDevMode.check( 'development', 'production' );
@@ -185,10 +184,6 @@ module.exports = env => {
 				]
 			}
 		} ) );
-	}
-
-	if ( MediaQueryPlugin ) {
-		styleRules.use.push( MediaQueryPlugin.loader );
 	}
 
 	const aditionalStyleLoaders = [
