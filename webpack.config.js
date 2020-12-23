@@ -26,6 +26,7 @@ module.exports = env => {
 	// Plugins
 	const HTMLWebpackPlugin = require( 'html-webpack-plugin' );
 	const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
+	const MediaQueryPlugin = require( 'media-query-plugin' );
 
 	const { CleanWebpackPlugin } = require( 'clean-webpack-plugin' );
 	const { BundleAnalyzerPlugin } = isAnalize && require( 'webpack-bundle-analyzer' );
@@ -71,6 +72,7 @@ module.exports = env => {
 						loader: 'css-loader',
 						options: sourceMap
 					},
+					isWatching && MediaQueryPlugin.loader,
 					{
 						loader: 'postcss-loader',
 						options: {
