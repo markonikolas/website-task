@@ -1,12 +1,18 @@
 const path = require( 'path' );
-// Helpers
-const ternary = require( './helper' );
 
 module.exports = env => {
 	// Env
 	const isDev = !env.production;
 	const isWatching = !!env.watch;
 	const isAnalize = !!env.analyze;
+
+	// Helpers
+	const Ternary = require( './helper/Ternary' );
+
+	// Modes
+	// Returns first parameter if in n mode, second otherwise
+	const inDevMode = new Ternary( isDev );
+	const inWatchMode = new Ternary( isWatching );
 
 	// Constants
 	const APP_DIR = './src';
@@ -15,7 +21,7 @@ module.exports = env => {
 	const ENTRY_FILENAME = 'index';
 
 	// Filenames
-	const assetFilename = ternary( isDev, '[name]', '[contenthash]' );
+	const assetFilename = inDevMode.check( '[name]', '[contenthash]' );
 
 	// Plugins
 	const HTMLWebpackPlugin = require( 'html-webpack-plugin' );
@@ -27,6 +33,8 @@ module.exports = env => {
 	const { SourceMapDevToolPlugin } = isDev && require( 'webpack' );
 
 	// Config
+	const mode = inDevMode.check( 'development', 'production' );
+
 	const sourceMap = {
 		sourceMap: isDev
 	};
@@ -39,7 +47,7 @@ module.exports = env => {
 				defaultVendors: {
 					// Note the usage of `[\\/]` as a path separator for cross-platform compatibility.
 					test: /[\\/]node_modules[\\/]lodash-es[\\/]/,
-					filename: isDev ? 'vendor.js' : '[contenthash].js',
+					filename: inDevMode.check( 'vendor.js', '[contenthash].js' ),
 					// Tells webpack to ignore splitChunks.minSize, splitChunks.minChunks, splitChunk.
 					// maxAsyncRequests and splitChunks.maxInitialRequests options and always create
 					// chunks for this cache group.
@@ -48,7 +56,7 @@ module.exports = env => {
 				// Imported in main.sass
 				normalize: {
 					test: /[\\/]node_modules[\\/]normalize.css[\\/]/,
-					filename: isDev ? 'vendor.css' : '[contenthash].css',
+					filename: inDevMode.check( 'vendor.css', '[contenthash].css' ),
 					enforce: true
 				}
 			}
@@ -64,8 +72,7 @@ module.exports = env => {
 			minify: !isDev
 		} ),
 		new MiniCssExtractPlugin( {
-			filename: `${BUILD_ASSETS_DIR}/${assetFilename}.css`,
-			chunkFilename: `${BUILD_ASSETS_DIR}/[name].css`
+			filename: `${BUILD_ASSETS_DIR}/styles/${assetFilename}.css`
 		} )
 	];
 
@@ -85,13 +92,13 @@ module.exports = env => {
 	}
 
 	return {
-		mode: ternary( isDev, 'development', 'production' ),
+		mode,
 		devtool: false,
 		entry: path.resolve( __dirname, APP_DIR, ENTRY_FILENAME ),
 		output: {
 			path: path.resolve( __dirname, BUILD_DIR ),
-			filename: isDev ? '[name].js' : '[contenthash].js',
-			chunkFilename: isDev ? '[name]' : '[contenthash].js',
+			filename: inDevMode.check( '[name].js', '[contenthash].js' ),
+			chunkFilename: inDevMode.check( '[name]', '[contenthash].js' ),
 			publicPath: ''
 		},
 		devServer: {
@@ -112,8 +119,7 @@ module.exports = env => {
 				{
 					test: /\.s?[ac]ss$/i,
 					use: [
-						ternary(
-							isWatching,
+						inWatchMode.check(
 							'style-loader',
 							MiniCssExtractPlugin.loader
 						),
@@ -150,7 +156,7 @@ module.exports = env => {
 					loader: 'url-loader',
 					options: {
 						name: `${BUILD_ASSETS_DIR}/icons/${assetFilename}.[ext]`,
-						limit: ternary( isWatching, 10240, false )
+						limit: inWatchMode.check( 10240, false )
 					}
 				},
 				{
@@ -159,7 +165,7 @@ module.exports = env => {
 					options: {
 						enforce: 'pre',
 						bypassOnDebug: true,
-						limit: ternary( isWatching, 10240, false )
+						limit: inWatchMode.check( 10240, false )
 					}
 				},
 				{
@@ -177,12 +183,12 @@ module.exports = env => {
 					loader: 'url-loader',
 					options: {
 						name: `${BUILD_ASSETS_DIR}/images/${assetFilename}.[ext]`,
-						limit: ternary( isWatching, 10240, false )
+						limit: inWatchMode.check( 10240, false )
 					}
 				}
 			]
 		},
-		optimization: !isWatching ? optimization : { minimize: false },
+		optimization: inWatchMode.check( { minimize: false }, optimization ),
 		plugins
 	};
 };

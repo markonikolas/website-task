@@ -1,14 +1,14 @@
 // Font imports in "./stylesheets/base/_fonts.sass"
 
-// Styles
+// // Styles
 import './stylesheets/main.sass';
 
-// Icons
+// // Icons
 // import './assets/icons/icon-facebook.svg';
 // import './assets/icons/icon-instagram.svg';
 // import './assets/icons/icon-twitter.svg';
 
-// Images
+// // Images
 // import './assets/images/img-connect.jpg';
 // import './assets/images/img-forest.jpg';
 // import './assets/images/img-sea.jpg';
