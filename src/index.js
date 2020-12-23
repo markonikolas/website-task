@@ -1,7 +1,7 @@
 // Font imports in "./stylesheets/base/_fonts.sass"
 
-// // Styles
-import './stylesheets/main.sass';
+// // // Styles
+// import './stylesheets/main.sass';
 
 // // Icons
 // import './assets/icons/icon-facebook.svg';

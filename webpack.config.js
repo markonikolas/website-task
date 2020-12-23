@@ -31,6 +31,7 @@ module.exports = env => {
 	const { BundleAnalyzerPlugin } = isAnalize && require( 'webpack-bundle-analyzer' );
 	const { WebpackManifestPlugin } = !isDev && require( 'webpack-manifest-plugin' );
 	const { SourceMapDevToolPlugin } = isDev && require( 'webpack' );
+	const CssMinimizerPlugin = !isDev && require( 'css-minimizer-webpack-plugin' );
 
 	// Config
 	const mode = inDevMode.check( 'development', 'production' );
@@ -153,8 +154,26 @@ module.exports = env => {
 					enforce: true
 				}
 			}
-		}
+		},
+		minimize: !isDev,
+		minimizer: [ ]
 	};
+
+	if ( CssMinimizerPlugin ) {
+		// Webpack 5 feature `...` to 'extend' Terser and other minimizers
+		optimizationOptions.minimizer.push( `...`, new CssMinimizerPlugin( {
+			parallel: true,
+			sourceMap: true,
+			minimizerOptions: {
+				preset: [
+					'default',
+					{
+						discardComments: { removeAll: true }
+					}
+				]
+			}
+		} ) );
+	}
 
 	const optimization = inWatchMode.check( { minimize: false }, optimizationOptions );
 
@@ -182,7 +201,7 @@ module.exports = env => {
 	if ( SourceMapDevToolPlugin ) {
 		plugins.push( new SourceMapDevToolPlugin( {
 			filename: 'sourcemaps/[contenthash][ext].map',
-			exclude: [ 'vendor.js', 'lodash.js', 'common.js', 'runtime.js' ]
+			exclude: [ 'vendor.js', 'runtime.js' ]
 		} ) );
 	}
 
