@@ -159,7 +159,8 @@ module.exports = env => {
 			filename: 'index.html',
 			showErrors: isDev,
 			minify: !isDev,
-			favicon: `${APP_DIR}/assets/icons/icon-twitter.svg`
+			favicon: `${APP_DIR}/assets/images/favicon.png`,
+			scriptLoading: 'defer'
 		} ),
 		new MiniCssExtractPlugin( {
 			filename: `${BUILD_ASSETS_DIR}/styles/${assetFilename}.css`
@@ -167,9 +168,9 @@ module.exports = env => {
 	];
 
 	// *******
-
 	// Conditionally inserted
 	// Loaders
+	// *******
 	if ( CssMinimizerPlugin ) {
 		// Webpack 5 feature `...` to 'extend' Terser and other minimizers
 		optimizationOptions.minimizer.push( `...`, new CssMinimizerPlugin( {
@@ -228,6 +229,7 @@ module.exports = env => {
 			exclude: [ 'vendor.js', 'runtime.js' ]
 		} ) );
 	}
+
 	const config = {
 		mode,
 		devtool,
