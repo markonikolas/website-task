@@ -36,6 +36,8 @@ module.exports = env => {
 
 	// Config
 	const mode = inDevMode.check( 'development', 'production' );
+	// Fix for hmr not working properly beacuse of browserslist
+	const target = 'web';
 	const devtool = false;
 	const entry = path.resolve( __dirname, APP_DIR, ENTRY_FILENAME );
 	const output = {
@@ -45,11 +47,13 @@ module.exports = env => {
 		publicPath: ''
 	};
 	const devServer = {
-		contentBase: BUILD_DIR,
+		contentBase: path.join( __dirname, BUILD_DIR ),
+		compress: true,
 		open: {
 			target: 'navigator'
 		},
-		hot: true
+		hot: true,
+		hotOnly: true
 	};
 	const watchOptions = {
 		ignored: /node_modules/,
@@ -159,7 +163,8 @@ module.exports = env => {
 			showErrors: isDev,
 			minify: !isDev,
 			favicon: `${APP_DIR}/assets/images/favicon.png`,
-			scriptLoading: 'defer'
+			scriptLoading: 'defer',
+			cache: true
 		} ),
 		new MiniCssExtractPlugin( {
 			filename: `${BUILD_ASSETS_DIR}/styles/${assetFilename}.css`
@@ -227,6 +232,7 @@ module.exports = env => {
 
 	const config = {
 		mode,
+		target,
 		devtool,
 		entry,
 		output,
