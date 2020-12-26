@@ -26,6 +26,7 @@ module.exports = env => {
 	// Plugins
 	const HTMLWebpackPlugin = require( 'html-webpack-plugin' );
 	const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
+	const BrowserSyncPlugin = require( 'browser-sync-webpack-plugin' );
 
 	const { CleanWebpackPlugin } = require( 'clean-webpack-plugin' );
 	const { BundleAnalyzerPlugin } = isAnalize && require( 'webpack-bundle-analyzer' );
@@ -49,16 +50,17 @@ module.exports = env => {
 	const devServer = {
 		contentBase: path.join( __dirname, BUILD_DIR ),
 		compress: true,
-		open: {
-			target: 'navigator'
-		},
 		hot: true,
-		hotOnly: true
+		watchContentBase: true,
+		index: 'index.html'
+		// open: {
+		// 	target: 'navigator'
+		// },
 	};
 	const watchOptions = {
 		ignored: /node_modules/,
-		aggregateTimeout: 400,
-		poll: 1000
+		aggregateTimeout: 0,
+		poll: 0
 	};
 
 	const sourceMap = {
@@ -158,8 +160,7 @@ module.exports = env => {
 			verbose: true
 		} ),
 		new HTMLWebpackPlugin( {
-			template: './src/template.html',
-			filename: 'index.html',
+			template: 'src/index.html',
 			showErrors: isDev,
 			minify: !isDev,
 			favicon: `${APP_DIR}/assets/images/favicon.png`,
@@ -168,7 +169,32 @@ module.exports = env => {
 		} ),
 		new MiniCssExtractPlugin( {
 			filename: `${BUILD_ASSETS_DIR}/styles/${assetFilename}.css`
-		} )
+		} ),
+		new BrowserSyncPlugin(
+			// BrowserSync options
+			{
+				host: 'localhost',
+				port: 8000,
+				proxy: 'http://localhost:8080/',
+
+				files: [
+					'**/template.html', // reload on html change
+					{
+						match: '**/*.js',
+						options: {
+							ignored: [ '**/*.js' ] // ignore all js files, hmr will take care of it
+						}
+					},
+					{
+						match: '**/*.sass',
+						options: {
+							ignored: [ '**/*.sass' ] // ignore all sass files, hmr will take care of it
+						}
+					}
+				],
+				reloadDelay: 0
+			}, { reload: false }
+		)
 	];
 
 	// *******
