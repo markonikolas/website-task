@@ -172,8 +172,7 @@ module.exports = env => {
 			minify: !isDev,
 			favicon: `${APP_DIR}/assets/images/favicon.png`,
 			scriptLoading: 'defer',
-			cache: true,
-			title: 'Hello World !'
+			cache: true
 		} ),
 		new MiniCssExtractPlugin( {
 			filename: `${BUILD_ASSETS_DIR}/styles/${assetFilename}.css`
