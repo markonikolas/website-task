@@ -51,8 +51,7 @@ module.exports = env => {
 		contentBase: path.join( __dirname, BUILD_DIR ),
 		compress: true,
 		hot: true,
-		watchContentBase: true,
-		index: 'index.html'
+		watchContentBase: true
 		// open: {
 		// 	target: 'navigator'
 		// },
@@ -108,6 +107,13 @@ module.exports = env => {
 					name: `${BUILD_ASSETS_DIR}/images/${assetFilename}.[ext]`,
 					limit: inWatchMode.check( 10240, false )
 				}
+			},
+			{
+				test: /\.pug$/i,
+				loader: 'pug-loader',
+				options: {
+					esModule: false
+				}
 			}
 		]
 	};
@@ -135,7 +141,7 @@ module.exports = env => {
 			}
 		},
 		minimize: !isDev,
-		minimizer: [ ]
+		minimizer: [ `...` ]
 	};
 
 	// Loader Rules
@@ -160,12 +166,14 @@ module.exports = env => {
 			verbose: true
 		} ),
 		new HTMLWebpackPlugin( {
-			template: 'src/index.html',
+			template: 'src/template.pug',
+			filename: 'index.html',
 			showErrors: isDev,
 			minify: !isDev,
 			favicon: `${APP_DIR}/assets/images/favicon.png`,
 			scriptLoading: 'defer',
-			cache: true
+			cache: true,
+			title: 'Hello World !'
 		} ),
 		new MiniCssExtractPlugin( {
 			filename: `${BUILD_ASSETS_DIR}/styles/${assetFilename}.css`
@@ -178,7 +186,7 @@ module.exports = env => {
 				proxy: 'http://localhost:8080/',
 
 				files: [
-					'**/template.html', // reload on html change
+					'**/template.pug', // reload on html change
 					{
 						match: '**/*.js',
 						options: {
@@ -251,7 +259,7 @@ module.exports = env => {
 
 	if ( SourceMapDevToolPlugin ) {
 		plugins.push( new SourceMapDevToolPlugin( {
-			filename: 'sourcemaps/[contenthash][ext].map',
+			filename: 'maps/[contenthash][ext].map',
 			exclude: [ 'vendor.js', 'runtime.js' ]
 		} ) );
 	}
@@ -268,6 +276,8 @@ module.exports = env => {
 		optimization,
 		plugins
 	};
+
+	console.log( config.mode );
 
 	return config;
 };

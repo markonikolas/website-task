@@ -3,17 +3,7 @@
 // Styles
 import './stylesheets/main.sass';
 
-// Icons
-import './assets/icons/icon-facebook.svg';
-import './assets/icons/icon-instagram.svg';
-import './assets/icons/icon-twitter.svg';
-
-// Images
-import './assets/images/img-connect.jpg';
-import './assets/images/img-forest.jpg';
-import './assets/images/img-sea.jpg';
-
-import './scripts/index';
+import './scripts';
 
 // Only files accepted here will be hot reloaded.
 // When making changes in this file be sure to reload the page.
