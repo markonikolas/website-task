@@ -276,7 +276,5 @@ module.exports = env => {
 		plugins
 	};
 
-	console.log( config.mode );
-
 	return config;
 };
