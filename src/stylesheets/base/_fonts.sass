@@ -1,13 +1,15 @@
 // -----------------------------------------------------------------------------
 // This file contains all @font-face declarations, if any.
 // -----------------------------------------------------------------------------
-// Fonts imported trought mixin
+// Fonts imported trough mixin
+
+// Include base fonts
 
 $font-name: 'Open Sans'
-
 $font-weights: ('Light': 300, 'Regular': 400, 'SemiBold': 600, 'Bold': 700, 'ExtraBold': 800 )
+@include fonts($font_weights)
+
+// Include italics if any.
 
 $font-italics: ('LightItalic': 300, 'Italic': 400, 'SemiBoldItalic': 600, 'BoldItalic': 700, 'ExtraBoldItalic': 800 )
-
-@include fonts($font_weights)
 @include fonts($font_italics, true)
