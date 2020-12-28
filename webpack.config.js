@@ -166,7 +166,7 @@ module.exports = env => {
 			verbose: true
 		} ),
 		new HTMLWebpackPlugin( {
-			template: 'src/template.pug',
+			template: 'src/templates/template.pug',
 			filename: 'index.html',
 			showErrors: isDev,
 			minify: !isDev,
