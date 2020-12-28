@@ -1,23 +1,21 @@
 @charset "UTF-8"
 
-// 1. Vendors (node_modules)
+// 1. Vendors (imported from node_modules)
 
 @import normalize.css
+// @import bootstrap.css
+// @import animate.css
 
 // 2. Configuration and helpers
 
-@import abstracts/variables
-@import abstracts/functions
-@import abstracts/mixins
-
-
+@import utils/variables
+@import utils/functions
+@import utils/mixins
 
 // 3. Base stuff
 
 @import base/base
 @import base/fonts
-@import base/typography
-@import base/helpers
 
 // 4. Layout-related sections
 
@@ -29,6 +27,6 @@
 @import components/button
 
 // 6. Page-specific styles
+// For multipage sites
 
-@import pages/home
-@import pages/starter
+// 7. Themes if any.
