@@ -1,7 +1,7 @@
 {
-    "name": "starter",
+    "name": "website-task",
     "version": "1.0.0",
-    "description": "Vanilla js starter without frameworks.",
+    "description": "",
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,21 +9,21 @@
         "build:dev": "webpack --progress --env development",
         "build:prod": "webpack --progress --env production",
         "analyze:dev": "webpack --env development --env analyze",
-        "analyze:prod": "webpack --env production --env analyze"
+        "analyze:prod": "webpack --env production --env analyze",
+        "deploy": "cp public/* /var/www/website-task/ -r",
+        "deploy:dev": "npm run build:dev && npm run deploy",
+        "deploy:prod": "npm run build:prod && npm run deploy"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/n1c01ash/es6-starter.git"
+        "url": "https://github.com/n1c01ash/website-task.git"
     },
     "keywords": [
-        "starter"
+        ""
     ],
     "author": "Marko Nikolaš",
     "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/n1c01ash/es6-starter/issues"
-    },
-    "homepage": "https://github.com/n1c01ash/es6-starter#readme",
+    "homepage": "",
     "browserslist": [
         "> .5%, last 5 versions"
     ],
@@ -60,7 +60,6 @@
     },
     "dependencies": {
         "lodash-es": "^4.17.20",
-        "normalize.css": "^8.0.1",
-        "pug": "^3.0.0"
+        "normalize.css": "^8.0.1"
     }
 }
