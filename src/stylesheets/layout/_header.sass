@@ -3,4 +3,37 @@
 // -----------------------------------------------------------------------------
 
 .header
-    height: auto
+    position: relative
+    height: 100vh
+    display: flex
+    flex-direction: column
+
+    &::before
+        content: ''
+        display: block
+        height: 80vh
+        position: absolute
+        top: -20px
+        left: -20px
+        right: -20px
+        background: url('/src/assets/images/header.jpg')
+        opacity: 0.75
+        background-size: cover
+        background-position: 50% 70%
+        background-repeat: no-repeat
+        z-index: -1
+
+    &__title
+        margin-bottom: 0
+        margin-top: auto
+        padding-top: 200px
+        text-shadow: 0 0 10px rgba(#000,0.25)
+
+    &__text--bottom
+        margin-top: auto
+        height: 20vh
+        text-align: center
+        padding-top: 20px
+        letter-spacing: 0.0225rem
+        color: lighten(#000, 10%)
+        line-height: 1.618

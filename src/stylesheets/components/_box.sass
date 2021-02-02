@@ -1,0 +1,15 @@
+.box
+    background: lighten(deepskyblue, 32)
+    height: 100%
+    width: 100%
+
+    &:first-child 
+        grid-row: span 1
+
+    grid-row: span 2
+
+    &:nth-last-child(2n+1)
+        grid-column: 1 / 2
+
+    &:nth-last-child(2n)
+        grid-column: 2 / 3
