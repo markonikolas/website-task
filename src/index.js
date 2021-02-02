@@ -2,7 +2,6 @@
 
 // Styles
 import './stylesheets/main.sass';
-import './scripts';
 
 import './assets/images/header.jpg';
 import './assets/images/footer.jpg';
