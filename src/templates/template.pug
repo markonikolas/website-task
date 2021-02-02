@@ -48,11 +48,11 @@ html(lang='en')
                     p.text.content__text Alright, let's set your destination time. This is the exact time you left. I'm gonna send you back at exactly
 
         footer.footer
-            section
+            section.footer__group
                 h1.title.footer__title.title--left Wait a minute
                 p.text.footer__text.text--left Listen, Doc, you know there's something I haven't told you about the night we made that tape. That ain't no airplane, look. You don't understand. Hey Marty, I'm not your answering service, but you're outside pouting about the car, Jennifer Parker called you twice. Just relax now Calvin, you've got a big bruise on you're head.
-                span.hashtag #zemeckis
+            span.hashtag #zemeckis
                
-                div
-                - const footer = 'static/images/footer.jpg';
-                    img.image.footer__image(src=footer alt="Mountains")
+            div
+            - const footer = 'static/images/footer.jpg';
+                img.image.footer__image(src=footer alt="Mountains")

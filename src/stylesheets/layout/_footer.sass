@@ -14,12 +14,56 @@
         @include atSmall()
             margin: 10px
 
+
+        @include atMedium()
+            font-size: 2rem !important
+
     &__text
         margin-top: 0
     
         @include atSmall()
             margin: 10px
+        
 
+    &__image
+        @include atMedium()
+            max-width: 50.3% !important
+            height: 500px !important
+
+
+    &__group
+        @include atMedium()
+            padding-left: 40px
+            padding-right: 20px
+            line-height: 1.618
 
     @include atSmall()
         margin: 0 10px 20px
+
+    @include atMedium()
+        margin: 0 20px 20px
+        display: flex
+
+.hashtag
+    width: 100%
+    display: block
+    text-align: center
+    font-size: 4rem
+    text-transform: uppercase
+    font-family: 'PT Sans', sans-serif
+    font-weight: 700
+    color: lighten(deepskyblue, 30%)
+    
+    @include atMedium()
+        position: absolute
+        bottom: 20px
+        z-index: 10
+    
+        &::after
+            content: 'ECKIS'
+            position: absolute
+            left: 50%
+            transform: translateX(-4px)
+            font-size: 4.025rem
+            text-shadow: 0 0 10px rgba(0,0,0,0.25)
+            color: #FFF

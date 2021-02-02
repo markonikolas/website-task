@@ -25,6 +25,9 @@
 
     @include atSmall()
         margin: 0 10px
+    
+    @include atMedium()
+        margin: 0 20px
 
     &__title
         text-transform: lowercase !important
@@ -32,6 +35,9 @@
         margin-top: auto
         padding-top: 200px
         text-shadow: 0 0 10px rgba(#000,0.25)
+        @include atMedium()
+            margin-top: 0
+            padding-top: 80px
 
     &__text--bottom
         height: 20vh
@@ -41,13 +47,3 @@
         color: lighten(#000, 10%)
         line-height: 1.618
         margin: auto 10px 0
-
-.hashtag
-    width: 100%
-    display: block
-    text-align: center
-    font-size: 4rem
-    text-transform: uppercase
-    font-family: 'PT Sans', sans-serif
-    font-weight: 700
-    color: lighten(deepskyblue, 30%)
