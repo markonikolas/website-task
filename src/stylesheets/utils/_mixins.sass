@@ -1,6 +1,7 @@
 // -----------------------------------------------------------------------------
 // This file contains all application-wide Sass mixins.
 // -----------------------------------------------------------------------------
+@use 'sass:map'
 
 /// Event wrapper
 /// @author Harry Roberts
@@ -50,3 +51,20 @@
     grid-auto-rows: repeatRC($rows, $min, $max, $minmax)
   @else
     grid-template-rows: repeatRC($rows, $min, $max, $minmax)
+
+
+$small: map.get($breakpoints, 'small')
+$medium: map.get($breakpoints, 'medium')
+$large: map.get($breakpoints, 'large')
+
+@mixin atSmall()
+    @media only screen and (min-width: $small)
+        @content
+
+@mixin atMedium()
+    @media only screen and (min-width: $medium)
+        @content
+
+@mixin atLarge()
+    @media only screen and (min-width: $large)
+        @content

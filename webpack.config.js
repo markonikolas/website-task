@@ -82,12 +82,26 @@ module.exports = env => {
 				}
 			},
 			{
-				test: /\.(png|jpe?g|svg)$/i,
+				test: /\.(png|jpeg|jpg|svg)$/i,
 				loader: 'image-webpack-loader',
 				options: {
 					enforce: 'pre',
 					bypassOnDebug: true,
-					limit: inWatchMode.check( 10240, false )
+					limit: inWatchMode.check( 10240, false ),
+					mozjpeg: {
+						progressive: true,
+						quality: 25
+					},
+					optipng: {
+						enabled: false
+					},
+					pngquant: {
+						quality: [ 0.65, 0.2 ],
+						speed: 4
+					},
+					webp: {
+						quality: 75
+					}
 				}
 			},
 			{
@@ -104,7 +118,7 @@ module.exports = env => {
 				test: /\.(png|jpe?g)$/i,
 				loader: 'url-loader',
 				options: {
-					name: `${BUILD_ASSETS_DIR}/images/${assetFilename}.[ext]`,
+					name: `${BUILD_ASSETS_DIR}/images/[name].[ext]`,
 					limit: inWatchMode.check( 10240, false )
 				}
 			},
