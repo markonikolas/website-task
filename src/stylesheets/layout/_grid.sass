@@ -6,7 +6,11 @@
         gap: 15px
 
     &--3
-        @include atLarge()
-            grid-template-columns: 300px 300px 450px
+        @include atMedium()
+            grid-template-columns: 0.25fr 0.35fr 0.4fr
             grid-template-rows: 450px repeat(2, 500px) 150px 300px
+            gap: 25px
+
+        @include atLarge()
+            // grid-template-rows: 450px repeat(2, 500px) 150px 300px
             gap: 25px

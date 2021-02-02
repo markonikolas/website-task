@@ -6,7 +6,7 @@
     @extend %head-foot-margin
     margin: 0
     max-width: $site-width
-    
+
     &__title
         max-width: 120px
         margin-top: 20px
@@ -30,8 +30,7 @@
         @include atMedium()
             max-width: 50.3% !important
             height: 500px !important
-
-
+            z-index: 1
     &__group
         @include atMedium()
             padding-left: 40px
@@ -58,7 +57,7 @@
     @include atMedium()
         position: absolute
         bottom: 20px
-        z-index: 10
+
     
         &::after
             content: 'ECKIS'
@@ -68,3 +67,4 @@
             font-size: 4.025rem
             text-shadow: 0 0 10px rgba(0,0,0,0.25)
             color: #FFF
+            z-index: 9999
