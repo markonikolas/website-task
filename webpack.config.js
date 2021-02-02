@@ -119,7 +119,8 @@ module.exports = env => {
 				loader: 'url-loader',
 				options: {
 					name: `${BUILD_ASSETS_DIR}/images/[name].[ext]`,
-					limit: inWatchMode.check( 10240, false )
+					limit: inWatchMode.check( 10240, false ),
+					publicPath: isDev ? '/' : '/website-task'
 				}
 			},
 			{
