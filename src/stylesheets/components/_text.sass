@@ -7,6 +7,9 @@
 
     &--small
         font-size: 14px
+        @include atLarge()
+            font-size: 18px
+            margin: auto 30px 0
 
     &--left
         @extend %text-left

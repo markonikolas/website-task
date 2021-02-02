@@ -1,4 +1,6 @@
 .content 
+    max-width: $site-width
+
     &__title
         text-transform: uppercase
         margin: 5px 0
@@ -6,3 +8,10 @@
     &__text
         line-height: 1.4
         margin: 10px 0
+
+        @include atLarge()
+            font-size: 18px
+            line-height: 1.618
+            
+    @include atLarge()
+        margin-bottom: 40px

@@ -7,6 +7,7 @@
     height: 100vh
     display: flex
     flex-direction: column
+    max-width: $site-width
 
     &::before
         content: ''
@@ -35,15 +36,19 @@
         margin-top: auto
         padding-top: 200px
         text-shadow: 0 0 10px rgba(#000,0.25)
+
         @include atMedium()
             margin-top: 0
             padding-top: 80px
 
-    &__text--bottom
-        height: 20vh
-        text-align: center
-        padding-top: 20px
-        letter-spacing: 0.0225rem
-        color: lighten(#000, 10%)
-        line-height: 1.618
-        margin: auto 10px 0
+    &__text
+        text-shadow: 0 0 10px rgba(#000,0.25)
+
+        &--bottom
+            height: 20vh
+            text-align: center
+            padding-top: 20px
+            letter-spacing: 0.0225rem
+            color: lighten(#000, 10%)
+            line-height: 1.618
+            margin: auto 10px 0
