@@ -2,6 +2,7 @@
     font-size: 1.8rem
     text-align: center
     font-family: $font-serif
+    text-transform: uppercase
 
     &--white
         @extend %color-white
@@ -18,3 +19,9 @@
 
     &--thick
         @extend %text-thick
+
+    &--lower
+        text-transform: capitalized
+    
+    &--left
+        @extend %text-left

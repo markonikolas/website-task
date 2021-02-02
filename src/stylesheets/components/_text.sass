@@ -1,5 +1,5 @@
 .text
-    text-align: center
+    @extend %text-center
     font-family: $font-sans
 
     &--white
@@ -7,6 +7,9 @@
 
     &--small
         font-size: 14px
+
+    &--left
+        @extend %text-left
 
     &--big
         font-size: 20px

@@ -2,7 +2,24 @@
 // This file contains all styles related to the footer of the site/application.
 // -----------------------------------------------------------------------------
 .footer
-    max-height: 250px
+    position: relative
+    @extend %head-foot-margin
+    margin: 0
 
-    &__wrapper
-        max-width: 100%
+    &__title
+        max-width: 120px
+        margin-top: 20px
+        margin-bottom: 0
+
+        @include atSmall()
+            margin: 10px
+
+    &__text
+        margin-top: 0
+    
+        @include atSmall()
+            margin: 10px
+
+
+    @include atSmall()
+        margin: 0 10px 20px

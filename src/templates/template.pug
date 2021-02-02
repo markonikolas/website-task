@@ -10,13 +10,13 @@ html(lang='en')
             p.text.text--white.text--thick.text--big Where we're going we don't need roads!       
             p.text.text--small.header__text--bottom Whoa, this is it, this is the part coming up, Doc. Well, I figured, what the hell. Ahh. Hey I'm talking to you, McFly, you Irish bug. So you're my Uncle Joey. Better get used to these bars, kid.
 
-        main.grid.grid--2.grid--3
+        main.content.grid.grid--2.grid--3
                 
                 div.box.text-thick.text--white 1
 
                 div.paragraph
-                    h2.title.title--small Erased from existence.
-                    p.text Yeah, but I never picked a fight in my entire life. Mom, Dad. Right, and where am I gonna be? Yeah, well, how about my homework, McFly? Marty you gotta come back with me.
+                    h2.title.content__title.title--small Erased from existence
+                    p.text.content__text Yeah, but I never picked a fight in my entire life. Mom, Dad. Right, and where am I gonna be? Yeah, well, how about my homework, McFly? Marty you gotta come back with me.
 
                 - const step1 = 'static/images/step-1.jpg';
                     img.image(src=step1, alt="Mountain, Valley")
@@ -25,8 +25,8 @@ html(lang='en')
                 div.box.text-thick.text--white 2
 
                 div.paragraph
-                    h2.title.title--small Hey, hey, keep
-                    p.text Hey, hey, keep rolling, keep rolling there. No, no, no, no, this sucker's electrical. But I need a nuclear reaction to generate the one point twenty-one gigawatts of electricity that I need. Just turn around, McFly, and walk away. Are you deaf, McFly? Close the door and beat it. Yeah. Well uh, good, fine. Right.
+                    h2.title.content__title.title--small Hey, hey, keep
+                    p.text.content__text Hey, hey, keep rolling, keep rolling there. No, no, no, no, this sucker's electrical. But I need a nuclear reaction to generate the one point twenty-one gigawatts of electricity that I need. Just turn around, McFly, and walk away. Are you deaf, McFly? Close the door and beat it. Yeah. Well uh, good, fine. Right.
                 
                 - const step2 = 'static/images/step-2.jpg';
                     img.image(src=step2, alt="Mountain")
@@ -34,8 +34,9 @@ html(lang='en')
                 div.box.text-thick.text--white 3
 
                 div.paragraph   
-                    h2.title.title--small Whoa, whoa, okay.
-                    p.text Ho, you mean you're gonna touch her on her- Yeah. Hey kid, what you do, jump ship? Uh, stories, science fiction stories, about visitors coming down to Earth from another planet. I don't like her, Marty. Any girl who calls a boy is just asking for trouble.
+                    h2.title.content__title.title--small Whoa, whoa, okay
+                    p.text.content__text Ahh. What, well you mean like a date? No, Marty, we've already agreed that having information about the future could be extremely dangerous. Even if your intentions are good, they could backfire drastically. Whatever you've got to tell me I'll find out through the natural course of time. Are you sure about this storm? Good morning, Mom.
+
 
                 - const step3 = 'static/images/step-3-4.jpg';
                     img.image(src=step3, alt="Mountain, Sea")     
@@ -43,15 +44,15 @@ html(lang='en')
                 div.box.text-thick.text--white 4
 
                 div.paragraph
-                    h2.title.title--small Good morning, Mom.
-                    p.text Alright, let's set your destination time. This is the exact time you left. I'm gonna send you back at exactly
+                    h2.title.content__title.title--small Good morning, Mom
+                    p.text.content__text Alright, let's set your destination time. This is the exact time you left. I'm gonna send you back at exactly
 
-        footer
+        footer.footer
             section
-                h1 Wait a minute.
-                p Listen, Doc, you know there's something I haven't told you about the night we made that tape. That ain't no airplane, look. You don't understand. Hey Marty, I'm not your answering service, but you're outside pouting about the car, Jennifer Parker called you twice. Just relax now Calvin, you've got a big bruise on you're head.
-                span #zemeckis
+                h1.title.footer__title.title--left Wait a minute
+                p.text.footer__text.text--left Listen, Doc, you know there's something I haven't told you about the night we made that tape. That ain't no airplane, look. You don't understand. Hey Marty, I'm not your answering service, but you're outside pouting about the car, Jennifer Parker called you twice. Just relax now Calvin, you've got a big bruise on you're head.
+                span.hashtag #zemeckis
                
-                    div
-                    - const footer = 'static/images/footer.jpg';
-                        img.image(src=footer alt="Mountains")
+                div
+                - const footer = 'static/images/footer.jpg';
+                    img.image.footer__image(src=footer alt="Mountains")

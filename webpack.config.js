@@ -115,7 +115,7 @@ module.exports = env => {
 				}
 			},
 			{
-				test: /\.(png|jpe?g)$/i,
+				test: /\.(png|jpeg|jpg)$/i,
 				loader: 'url-loader',
 				options: {
 					name: `${BUILD_ASSETS_DIR}/images/[name].[ext]`,
